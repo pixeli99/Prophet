@@ -1,5 +1,7 @@
 # Prophet: Fast Decoding for Diffusion Language Models
 
+`Code will be released in 4 days.`
+
 Official implementation of "Diffusion Language Models Know the Answer Before Decoding"
 
 ## Overview
