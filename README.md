@@ -89,21 +89,6 @@ accelerate launch eval_llada.py \
   --model_args model_path='/path/to/LLaDA-8B-Instruct',enable_early_exit=true,constraints_text="200:The|201:answer|202:is",gen_length=256,steps=256,block_length=32
 ```
 
-#### Other Benchmarks
-```bash
-# MMLU
-accelerate launch eval_llada.py \
-  --tasks mmlu \
-  --model llada_dist \
-  --model_args model_path='/path/to/LLaDA-8B-Instruct',enable_early_exit=true,gen_length=128,steps=128
-
-# HumanEval
-accelerate launch eval_llada.py \
-  --tasks humaneval \
-  --model llada_dist \
-  --model_args model_path='/path/to/LLaDA-8B-Instruct',enable_early_exit=true,gen_length=512,steps=512
-```
-
 ### Configuration Parameters
 
 #### Prophet Early Exit Parameters
