@@ -107,6 +107,26 @@ accelerate launch eval_llada.py \
 - `cfg_scale`: Classifier-free guidance scale (default: 0.0)
 - `remasking`: Remasking strategy ('low_confidence' or 'random', default: 'low_confidence')
 
+## Core Components
+
+### `generate_earlyexit.py`
+Main generation function with Prophet early exit mechanism:
+- `generate()`: LLaDA generation with logits gap monitoring
+- `should_early_exit()`: Phase-aware exit decision logic
+
+### `generate.py`
+Baseline LLaDA generation without early exit for comparison.
+
+### `eval_llada.py`
+Evaluation harness integration with Prophet support.
+
+### `analysis/`
+Trajectory-collection scripts (`collect_decoding_traj_gsm8k.py`,
+`collect_decoding_traj.sh`) and the figure-generation notebook
+(`visualize.ipynb`) for the answer-emergence analyses.
+
+
+
 ## Analysis: Decoding Trajectory Visualization
 
 The `analysis/` folder reproduces the *answer-emergence* analyses and
@@ -159,23 +179,8 @@ the `question_histories_*/` folders to be reachable from the current
 working directory (either generated locally via Option 1 or downloaded
 from Hugging Face via Option 2).
 
-## Core Components
 
-### `generate_earlyexit.py`
-Main generation function with Prophet early exit mechanism:
-- `generate()`: LLaDA generation with logits gap monitoring
-- `should_early_exit()`: Phase-aware exit decision logic
 
-### `generate.py`
-Baseline LLaDA generation without early exit for comparison.
-
-### `eval_llada.py`
-Evaluation harness integration with Prophet support.
-
-### `analysis/`
-Trajectory-collection scripts (`collect_decoding_traj_gsm8k.py`,
-`collect_decoding_traj.sh`) and the figure-generation notebook
-(`visualize.ipynb`) for the answer-emergence analyses.
 
 ## Citation
 
