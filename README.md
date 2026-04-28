@@ -107,6 +107,58 @@ accelerate launch eval_llada.py \
 - `cfg_scale`: Classifier-free guidance scale (default: 0.0)
 - `remasking`: Remasking strategy ('low_confidence' or 'random', default: 'low_confidence')
 
+## Analysis: Decoding Trajectory Visualization
+
+The `analysis/` folder reproduces the *answer-emergence* analyses and
+figures from the paper (e.g., the histograms showing what fraction of
+samples reach the correct answer by 25%/50% of the decoding steps, and
+the per-position change heatmaps). There are **two ways** to obtain the
+per-step decoding trajectories the notebook consumes:
+
+### Option 1: Collect trajectories yourself
+
+```bash
+cd analysis
+bash collect_decoding_traj.sh
+```
+
+This runs `collect_decoding_traj_gsm8k.py` across all four
+`{decode_policy} × {constraint_policy}` configurations on the full GSM8K
+test split (1,319 questions) and writes per-question `.pt` files to
+`question_histories_*/` folders. Each file stores:
+
+- `x0_history` — the model's denoised prediction (token IDs) at every
+  decoding step, organised by block.
+- `true_indices_history` — which positions get committed at each step.
+- Answer metadata (`pred_text`, `pred_ans`, `gt_text`, `ans_posidx`,
+  `prompt_token_len`, `gen_ids`, …).
+
+### Option 2: Download our precomputed trajectories from Hugging Face
+
+We release the trajectories used in the paper for both **GSM8K** (1,319
+questions × 4 settings) and **MMLU-STEM** (3,153 questions × 4 settings)
+on the Hugging Face Hub:
+**[YefanZhou98/DLM-Decoding-Analysis](https://huggingface.co/datasets/YefanZhou98/DLM-Decoding-Analysis)**.
+
+```python
+from huggingface_hub import snapshot_download
+
+local_dir = snapshot_download(
+    repo_id="YefanZhou98/DLM-Decoding-Analysis",
+    repo_type="dataset",
+)
+```
+
+See the [dataset card](https://huggingface.co/datasets/YefanZhou98/DLM-Decoding-Analysis)
+for the full schema, per-folder breakdown, and decoding configurations.
+
+### Reproduce the figures
+
+Open `analysis/visualize.ipynb` and run the cells. The notebook expects
+the `question_histories_*/` folders to be reachable from the current
+working directory (either generated locally via Option 1 or downloaded
+from Hugging Face via Option 2).
+
 ## Core Components
 
 ### `generate_earlyexit.py`
@@ -119,6 +171,11 @@ Baseline LLaDA generation without early exit for comparison.
 
 ### `eval_llada.py`
 Evaluation harness integration with Prophet support.
+
+### `analysis/`
+Trajectory-collection scripts (`collect_decoding_traj_gsm8k.py`,
+`collect_decoding_traj.sh`) and the figure-generation notebook
+(`visualize.ipynb`) for the answer-emergence analyses.
 
 ## Citation
 
